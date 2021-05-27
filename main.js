@@ -4,7 +4,7 @@ let k = 0
 let slider
 let sliderLabel
 let clusters = []
-let scale = 8
+let scale = 12
 let pointIdCounter = 0
 let addPointsButton
 let clearPointsButton
@@ -12,7 +12,7 @@ let randomizeClustersButton
 let clearColors = [
   [25, 25, 112, 100],
   [255, 0, 255, 100],
-  [255, 182, 193, 100],
+  [255, 165, 0, 100],
   [0, 255, 0, 100],
   [0, 255, 255, 100],
   [255, 0, 0, 100],
@@ -27,11 +27,11 @@ function setup() {
   sliderLabel.style('font-size', '20px')
   sliderLabel.style('font-family', 'Helvetica Neue')
   sliderLabel.style('display', 'inline-block')
-  sliderLabel.style('margin-right', '10px')
-  slider = createSlider(initialClusterValue, clearColors.length, 2)
+  sliderLabel.style('margin-right', '5px')
+  slider = createSlider(1, clearColors.length, initialClusterValue)
   slider.style('width', '150px')
   slider.input(sliderChange)
-  addPointsButton = createButton('Add 10 points');
+  addPointsButton = createButton('Add 10 Random Points');
   addPointsButton.mousePressed(() => addRandomPoints(10));
   clearPointsButton = createButton('Clear Points');
   clearPointsButton.mousePressed(() => points = []);
@@ -60,7 +60,7 @@ function draw() {
 }
 
 function addPoint(x_, y_) {
-  points.push({ x: x_, y: y_, color: [255, 0, 255, 100], id: pointIdCounter++ })
+  points.push({ x: x_, y: y_, color: [255, 255, 255, 100], id: pointIdCounter++ })
 }
 
 function mousePressed() {
@@ -75,15 +75,28 @@ function mousePressed() {
 //   }
 // }
 
+function getRandomBorderPosition() {
+  let side = floor(random(0, 4))
+  switch (side) {
+    case 0:
+      return { x: random(2.5 * scale, width - 2.5 * scale), y: 2.5 * scale }
+    case 1:
+      return { x: random(2.5 * scale, width - 2.5 * scale), y: height - 2.5 * scale }
+    case 2:
+      return { x: 2.5 * scale, y: random(2.5 * scale, height - 2.5 * scale) }
+    case 3:
+      return { x: width - 2.5 * scale, y: random(2.5 * scale, height - 2.5 * scale) }
+  }
+}
+
 function newClusters(n) {
   return Array(n).fill(null).map((e, i) => {
-    let ranX = floor(random(2 * scale, width - 2 * scale))
-    let ranY = floor(random(2 * scale, width - 2 * scale))
+    let newPosition = getRandomBorderPosition()
     return {
-      x: ranX,
-      y: ranY,
-      desiredX: ranX,
-      desiredY: ranY,
+      x: newPosition.x,
+      y: newPosition.y,
+      desiredX: newPosition.x,
+      desiredY: newPosition.y,
       id: i,
       color: clearColors[i],
       xVel: 0,
@@ -122,21 +135,19 @@ function updateDesiredClusterPositions() {
       }
     }
   }
-  if (points.length) {
     for (cluster of clusters) {
       positions = Object.keys(labels).filter(x => labels[x].cluster == cluster.id).map(x => labels[x])
-      if (positions.length) {
+      if (positions.length != 0) {
         newPosition = positions.reduce((acc, cur) => { return { x: acc.x + cur.px / positions.length, y: acc.y + cur.py / positions.length } }, { x: 0, y: 0 })
         cluster.desiredX = newPosition.x
         cluster.desiredY = newPosition.y
       }
     }
-  }
 }
 
 function drawclusters() {
   stroke(0)
-  fill([218, 165, 32, 100])
+  fill([218, 165, 32, 150])
   for (e of clusters) {
     beginShape();
     vertex(e.x, e.y - 2 * scale);
