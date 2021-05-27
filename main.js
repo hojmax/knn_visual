@@ -48,6 +48,13 @@ function mousePressed() {
   }
 }
 
+
+function touchStarted() {
+  if (0 <= mouseX && mouseX < width && 0 <= mouseY && mouseY < height) {
+    addPoint(mouseX, mouseY)
+  }
+}
+
 function newClusters(n) {
   return Array(n).fill(null).map((e, i) => {
     let ranX = floor(random(2 * scale, width - 2 * scale))
