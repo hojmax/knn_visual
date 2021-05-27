@@ -49,11 +49,11 @@ function mousePressed() {
 }
 
 
-function touchStarted() {
+/*function touchStarted() {
   if (0 <= mouseX && mouseX < width && 0 <= mouseY && mouseY < height) {
     addPoint(mouseX, mouseY)
   }
-}
+}*/
 
 function newClusters(n) {
   return Array(n).fill(null).map((e, i) => {
