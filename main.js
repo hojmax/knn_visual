@@ -42,7 +42,7 @@ function addPoint(x_, y_) {
   points.push({ x: x_, y: y_, color: [255, 0, 255, 100], id: pointIdCounter++ })
 }
 
-function mouseClicked() {
+function mousePressed() {
   if (0 <= mouseX && mouseX < width && 0 <= mouseY && mouseY < height) {
     addPoint(mouseX, mouseY)
   }
