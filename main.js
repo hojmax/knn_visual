@@ -6,28 +6,49 @@ let sliderLabel
 let clusters = []
 let scale = 8
 let pointIdCounter = 0
+let addPointsButton
+let clearPointsButton
+let randomizeClustersButton
 let clearColors = [
   [25, 25, 112, 100],
   [255, 0, 255, 100],
-  [255, 69, 0, 100],
+  [255, 182, 193, 100],
   [0, 255, 0, 100],
   [0, 255, 255, 100],
+  [255, 0, 0, 100],
 ]
 let accelerationConstant = 10
+let initialClusterValue = 2
 
 function setup() {
   cnv = createCanvas(550, 550)
-  slider = createSlider(2, 5, 2)
-  slider.style('width', '150px')
-  slider.input(sliderChange)
-  sliderLabel = createP(slider.value())
+  createElement('br');
+  sliderLabel = createP(initialClusterValue)
   sliderLabel.style('font-size', '20px')
   sliderLabel.style('font-family', 'Helvetica Neue')
   sliderLabel.style('display', 'inline-block')
-  sliderLabel.style('margin-left', '10px')
+  sliderLabel.style('margin-right', '10px')
+  slider = createSlider(initialClusterValue, clearColors.length, 2)
+  slider.style('width', '150px')
+  slider.input(sliderChange)
+  addPointsButton = createButton('Add 10 points');
+  addPointsButton.mousePressed(() => addRandomPoints(10));
+  clearPointsButton = createButton('Clear Points');
+  clearPointsButton.mousePressed(() => points = []);
+  randomizeClustersButton = createButton('Randomize Clusters');
+  randomizeClustersButton.mousePressed(() => clusters = newClusters(slider.value()));
   sliderChange()
 }
 
+
+function addRandomPoints(n) {
+  for (i = 0; i < n; i++) {
+    addPoint(
+      floor(random(scale, width - scale)),
+      floor(random(scale, width - scale))
+    )
+  }
+}
 
 function draw() {
   background(255)
@@ -47,6 +68,12 @@ function mousePressed() {
     addPoint(mouseX, mouseY)
   }
 }
+
+// function touchStarted() {
+//   if (0 <= mouseX && mouseX < width && 0 <= mouseY && mouseY < height) {
+//     addPoint(mouseX, mouseY)
+//   }
+// }
 
 function newClusters(n) {
   return Array(n).fill(null).map((e, i) => {
@@ -105,7 +132,6 @@ function updateDesiredClusterPositions() {
       }
     }
   }
-  console.log(clusters)
 }
 
 function drawclusters() {
