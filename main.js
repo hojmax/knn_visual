@@ -4,7 +4,7 @@ let k = 0
 let slider
 let sliderLabel
 let clusters = []
-let scale = 12
+let scale = 10
 let pointIdCounter = 0
 let addPointsButton
 let clearPointsButton
